@@ -1,41 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-// Function to factorize a number and print its factors
-void factorize(int num) {
-    for (int i = 2; i <= num / 2; ++i) {
-        if (num % i == 0) {
-            printf("%d=%d*%d\n", num, i, num / i);
-            return;
-        }
-    }
-    // If no factors found, the number is prime
-    printf("%d=%d*%d\n", num, 1, num);
-}
-
-int main(int argc, char *argv[]) {
-    // Check if filename is provided
-    if (argc != 2) {
-        printf("Usage: %s <file>\n", argv[0]);
-        return 1;
-    }
-
-    // Open the file
-    FILE *file = fopen(argv[1], "r");
-    if (file == NULL) {
-        printf("Error: Unable to open file %s\n", argv[1]);
-        return 1;
-    }
-
-    // Read numbers from the file and factorize them
-    int num;
-    while (fscanf(file, "%d", &num) != EOF) {
-        factorize(num);
-    }
-
-    // Close the file
-    fclose(file);
-
-    return 0;
-}
-
+#!/usr/bin/bash
+FILE=$1
+while read NUMBERS;
+do
+	factors=($(factor $NUMBER))
+	echo "NUMBERS=$(($NUMBERS/${factors[1]}))*${factors[1]}"
+done < $FILE
