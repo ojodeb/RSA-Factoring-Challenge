@@ -1,27 +1,41 @@
-import sys
+#include <stdio.h>
+#include <stdlib.h>
 
-def factorize(number):
-    factors = []
-    for i in range(2, int(number**0.5) + 1):
-        if number % i == 0:
-            factors.append((i, number // i))
-    return factors
+// Function to factorize a number and print its factors
+void factorize(int num) {
+    for (int i = 2; i <= num / 2; ++i) {
+        if (num % i == 0) {
+            printf("%d=%d*%d\n", num, i, num / i);
+            return;
+        }
+    }
+    // If no factors found, the number is prime
+    printf("%d=%d*%d\n", num, 1, num);
+}
 
-def main(filename):
-    with open(filename, 'r') as file:
-        numbers = file.readlines()
-    
-    for num in numbers:
-        num = int(num)
-        factors = factorize(num)
-        for factor_pair in factors:
-            print(f"{num}={factor_pair[0]}*{factor_pair[1]}")
+int main(int argc, char *argv[]) {
+    // Check if filename is provided
+    if (argc != 2) {
+        printf("Usage: %s <file>\n", argv[0]);
+        return 1;
+    }
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: factors <file>")
-        sys.exit(1)
-    
-    filename = sys.argv[1]
-    main(filename)
+    // Open the file
+    FILE *file = fopen(argv[1], "r");
+    if (file == NULL) {
+        printf("Error: Unable to open file %s\n", argv[1]);
+        return 1;
+    }
+
+    // Read numbers from the file and factorize them
+    int num;
+    while (fscanf(file, "%d", &num) != EOF) {
+        factorize(num);
+    }
+
+    // Close the file
+    fclose(file);
+
+    return 0;
+}
 
