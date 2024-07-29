@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <math.h>
+
+/**
+ * main - Factorizes numbers from a file.
+ *
+ * Return: 0 on success, 1 on error.
+ */
+int main(void)
+{
+    FILE *fp;
+    int num, i;
+
+    fp = fopen("numbers.txt", "r");
+    if (fp == NULL)
+    {
+        fprintf(stderr, "Error: Can't open file\n");
+        return (1);
+    }
+
+    while (fscanf(fp, "%d", &num) == 1)
+    {
+        for (i = 2; i <= sqrt(num); i++)
+        {
+            if (num % i == 0)
+            {
+                printf("%d=%d*%d\n", num, i, num / i);
+                break;
+            }
+        }
+        if (i > sqrt(num))
+        {
+            // Handle prime numbers or numbers that couldn't be factored
+            // You could print a message or simply ignore them
+        }
+    }
+
+    fclose(fp);
+    return (0);
+}
+
