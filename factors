@@ -1,29 +1,46 @@
-#!/usr/bin/python3
-"""factorize given set of numbers in a file to product of two small numbers"""
-from sys import argv
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
+bool factorize(long long n, long long *p, long long *q) {
+    if (n <= 1) {
+        return false;
+    }
 
-def factorize(number_to_check):
-    """"find two small numbers that multiply to give a given number"""
-    i = 2
+    for (long long i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            *p = i;
+            *q = n / i;
+            return true;
+        }
+    }
 
-    if number_to_check < 2:
-        return
-    
-    while number_to_check % i:
-        i += 1
-    print("{:.0f}={:.0f}*{:.0f}".format(number_to_check, number_to_check / i, i))
+    *p = n;
+    *q = 1;
+    return true;
+}
 
-if len(argv) != 2:
-    exit()
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: factors <file>\n");
+        return 1;
+    }
 
-try:
-    with open(argv[1]) as file:
-        line = file.readline()
+    FILE *file = fopen(argv[1], "r");
+    if (file == NULL) {
+        fprintf(stderr, "Error opening file: %s\n", argv[1]);
+        return 1;
+    }
 
-        while line != "":
-            number_to_check = int(line.split('\n')[0])
-            factorize(number_to_check)
-            line = file.readline()
-except:
-    pass
+    long long n;
+    long long p, q;
+
+    while (fscanf(file, "%lld", &n) == 1) {
+        if (factorize(n, &p, &q)) {
+            printf("%lld=%lld*%lld\n", n, p, q);
+        }
+    }
+
+    fclose(file);
+    return 0;
+}
