@@ -1,40 +1,29 @@
-#include <iostream>
-#include <fstream>
-#include <cmath>
+#!/usr/bin/python3
+"""factorize given set of numbers in a file to product of two small numbers"""
+from sys import argv
 
-using namespace std;
 
-/**
- * Factorizes numbers from a file.
- *
- * @param argc The number of command-line arguments.
- * @param argv An array of command-line arguments.
- * @return 0 if successful, 1 otherwise.
- */
-int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        cerr << "Usage: factors <file>" << endl;
-        return 1;
-    }
+def factorize(number_to_check):
+    """"find two small numbers that multiply to give a given number"""
+    i = 2
 
-    ifstream inputFile(argv[1]);
-    if (!inputFile.is_open()) {
-        cerr << "Error opening file: " << argv[1] << endl;
-        return 1;
-    }
+    if number_to_check < 2:
+        return
+    
+    while number_to_check % i:
+        i += 1
+    print("{:.0f}={:.0f}*{:.0f}".format(number_to_check, number_to_check / i, i))
 
-    int num;
-    while (inputFile >> num) {
-        int sqrtNum = sqrt(num);
+if len(argv) != 2:
+    exit()
 
-        for (int i = 2; i <= sqrtNum; ++i) {
-            if (num % i == 0) {
-                cout << num << "=" << i << "*" << num / i << endl;
-                break;
-            }
-        }
-    }
+try:
+    with open(argv[1]) as file:
+        line = file.readline()
 
-    inputFile.close();
-    return 0;
-}
+        while line != "":
+            number_to_check = int(line.split('\n')[0])
+            factorize(number_to_check)
+            line = file.readline()
+except:
+    pass
